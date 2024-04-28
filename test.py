@@ -55,6 +55,7 @@ print("Amplified Speaker Notes Scored (Qualis + Playoffs):")
 weekNum = 1
 
 for week in weeks.keys():
+    
     events = requests.get(tbaApiEndpoint + f"/events/2024/simple", headers=tbaHeaders).json()
     eventList = []
     
@@ -63,7 +64,6 @@ for week in weeks.keys():
             eventList.append(event["key"])
     
     ampLeverage = []
-    
     counter = 0
     for event in eventList:
     
@@ -75,18 +75,19 @@ for week in weeks.keys():
             if match["score_breakdown"] is not None:
                 speakerAmplifiedNotesBlue = match["score_breakdown"]["blue"]["teleopSpeakerNoteAmplifiedCount"]
                 ampNotesBlue = match["score_breakdown"]["blue"]["teleopAmpNoteCount"]
+                
                 if ampNotesBlue > 0:
                     ampLeverage.append({"match": matchCounter, "porcentage": speakerAmplifiedNotesBlue / ((ampNotesBlue / 2) * 4)})
-    
+                    
             if match["score_breakdown"] is not None:
                 speakerAmplifiedNotesRed = match["score_breakdown"]["red"]["teleopSpeakerNoteAmplifiedCount"]
                 ampNotesRed = match["score_breakdown"]["red"]["teleopAmpNoteCount"]
+                
                 if ampNotesRed > 0:
                     ampLeverage.append({"match": matchCounter, "porcentage": speakerAmplifiedNotesRed / ((ampNotesRed / 2) * 4)})
     
             matchCounter += 1
         counter += 1
-        #print(f"Event {counter}/{len(eventList)}")
     
     total = 0
     for metric in ampLeverage:
